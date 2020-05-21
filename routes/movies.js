@@ -1,21 +1,29 @@
-var express=require("express");
-var router=express.Router();
+const moviesService = require('../services/movies').moviesService;
+const router = require('express').Router();
 
-router.get('/:id',(req,res)=>{
-    res.send('details for movie ' +req.params.id)
-});
-router.get('/',(req,res)=>{
-    res.send('get movie')
-});
-router.post('/',(req,res)=>{
-    res.send('post movie')
-});
-router.put('/:id',(req,res)=>{
-    res.send('edit movie number '+req.params.id)
-});
-router.delete('/:id',(req,res)=>{
-    res.send('delete movie number '+req.params.id)
+router.get('/', async (req, res) => {
+    const movies = await moviesService.getAll();
+    res.json(movies);
 });
 
+router.get('/:id', async (req, res) => {
+    const movie = await moviesService.get(req.params.id);
+    res.json(movie);
+});
 
-module.exports=router
+router.post('/', async (req, res) => {
+    await moviesService.create(req.body);
+    res.send('ok');
+});
+
+router.put('/:id', async (req, res) => {
+    await moviesService.update(req.params.id, req.body);
+    res.send('ok');
+});
+
+router.delete('/:id', async (req, res) => {
+    await moviesService.delete(req.params.id);
+    res.send('ok');
+});
+
+module.exports = router;
