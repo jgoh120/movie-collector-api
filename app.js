@@ -5,7 +5,8 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var moviesRouter = require('./routes/movies')
+var moviesRouter = require('./routes/movies');
+var reviewRouter = require('/routes/reviews');
 
 var mongoConfig = require('./config/mongo');
 mongoConfig.init();
@@ -20,5 +21,6 @@ app.use(bodyParser.json());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/movies', moviesRouter);
+app.use('/reviews', reviewsRouter);
 
 module.exports = app;

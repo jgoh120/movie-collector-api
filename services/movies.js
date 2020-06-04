@@ -1,5 +1,4 @@
 class MoviesService {
-
     constructor(moviesModel) {
         this.moviesModel = moviesModel;
     }
@@ -30,7 +29,6 @@ class MoviesService {
     delete(id) {
         return this.moviesModel.deleteOne({ _id: id });
     }
-
 }
 
 const moviesModel = require('../models/movies');
