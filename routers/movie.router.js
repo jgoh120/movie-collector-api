@@ -1,13 +1,15 @@
 const movieController = require('../controllers/movie.controller').movieController;
 const router = require('express').Router();
 
+var reviewRouter = require('./review.router');
+
 router.get('/', async (req, res) => {
     const movies = await movieController.getAll();
     res.json(movies);
 });
 
-router.get('/:id', async (req, res) => {
-    const movie = await movieController.get(req.params.id);
+router.get('/:movieId', async (req, res) => {
+    const movie = await movieController.get(req.params.movieId);
     res.json(movie);
 });
 
@@ -16,14 +18,18 @@ router.post('/', async (req, res) => {
     res.send('ok');
 });
 
-router.put('/:id', async (req, res) => {
-    await movieController.update(req.params.id, req.body);
+router.put('/:movieId', async (req, res) => {
+    await movieController.update(req.params.movieId, req.body);
     res.send('ok');
 });
 
-router.delete('/:id', async (req, res) => {
-    await movieController.delete(req.params.id);
+router.delete('/:movieId', async (req, res) => {
+    await movieController.delete(req.params.movieId);
     res.send('ok');
 });
+
+
+router.use('/:movieId/reviews',reviewRouter)
+
 
 module.exports = router;

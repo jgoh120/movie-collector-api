@@ -27,7 +27,6 @@ class MovieController {
     delete(id) {
         return this.movieRepository.deleteOne({ _id: id });
     }
-
 }
 
 const movieRepository = require('../repositories/movie.repository');
