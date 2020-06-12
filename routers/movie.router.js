@@ -28,8 +28,6 @@ router.delete('/:movieId', async (req, res) => {
     res.send('ok');
 });
 
-
 router.use('/:movieId/reviews',reviewRouter)
-
 
 module.exports = router;
