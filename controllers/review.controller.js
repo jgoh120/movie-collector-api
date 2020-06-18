@@ -4,19 +4,24 @@ class ReviewController {
         this.reviewRepository = reviewRepository;
     }
 
-    getAllByMovieId(movieId) {
-        return this.reviewRepository.find({movieId:movieId});
+    // Getting all reviews for a partciular product
+    getAllByMovieId(movieId, review) {
+        return this.reviewRepository.find({movieId:movieId}, review);
     }
 
     get(id) {
         return this.reviewRepository.findById(id);
     }
 
-    create(movieId,review) {
-        return this.reviewRepository.create({
-            movieId:movieId,
-            ...review
-        });
+    // create(movieId,review) {
+    //     return this.reviewRepository.create({
+    //         movieId:movieId,
+    //         ...review
+    //     });
+    // }
+
+    create(review){
+        return this.reviewRepository.create(review);
     }
     
     update(id,review) {
