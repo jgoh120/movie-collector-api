@@ -4,9 +4,9 @@ class ReviewController {
         this.reviewRepository = reviewRepository;
     }
 
-    // Getting all reviews for a partciular product
-    getAllByMovieId(movieId, review) {
-        return this.reviewRepository.find({movieId:movieId}, review);
+    // Getting all reviews for a partciular movie
+    getAllByMovieId(movieId) {
+        return this.reviewRepository.find({movieId:movieId});
     }
 
     get(id) {
