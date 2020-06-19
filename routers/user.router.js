@@ -12,15 +12,15 @@ router.get('/:userId', async (req, res) => {
 
 router.post('/',async (req,res)=>{
     await userController.create(req.body);
-    res.send('ok user added');
+    res.send('ok');
 });
 router.put('/:userId', async(req,res)=>{
-    await reviewController.update(req.params.userId, req.body);
-    res.send('ok user details amended');
+    await userController.update(req.params.userId, req.body);
+    res.send('ok');
 });
 router.delete('/:userId', async(req,res)=>{
-    await reviewController.delete(req.params.userId);
-    res.send('ok user deleted');
+    await userController.delete(req.params.userId);
+    res.send('ok');
 });
 
 module.exports=router
