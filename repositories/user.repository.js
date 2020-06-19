@@ -23,7 +23,7 @@ var UserSchema = new mongoose.Schema({
     },
     contact: {
         type: Number,
-        required: true
+        required: false
     }
 });
 
