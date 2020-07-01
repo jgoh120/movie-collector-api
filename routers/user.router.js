@@ -1,10 +1,6 @@
 const userController = require('../controllers/user.controller').userController;
 const router = require('express').Router();
 
-router.get('/', async (req,res)=>{
-    const users = await userController.getAll();
-    res.json(users);
-});
 router.get('/:userId', async (req, res) => {
     const user = await userController.get(req.params.userId);
     res.json(user);
