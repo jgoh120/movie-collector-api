@@ -6,6 +6,7 @@ var cors = require('cors');
 var indexRouter = require('./routers/index.router');
 var movieRouter = require('./routers/movie.router');
 var userRouter = require('./routers/user.router');
+var authRouter = require('./routers/auth.router');
 
 var mongoConfig = require('./config/mongo');
 mongoConfig.init();
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 
 // mount routers
 app.use('/', indexRouter);
+app.use('/', authRouter);
 app.use('/movies', movieRouter);
 app.use('/users', userRouter);
 
