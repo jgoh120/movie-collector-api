@@ -12,12 +12,12 @@ class UserController {
         return this.userRepository.findById(id);
     }
 
-    create(movie) {
-        return this.userRepository.create(movie);
+    create(user) {
+        return this.userRepository.create(user);
     }
     
-    update(id, movie) {
-        return this.userRepository.updateOne({ _id: id }, movie);
+    update(id, user) {
+        return this.userRepository.updateOne({ _id: id }, user);
     }
 
     delete(id) {
