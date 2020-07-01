@@ -20,6 +20,6 @@ app.use(bodyParser.json());
 app.use('/', indexRouter);
 app.use('/movies', movieRouter);
 app.use('/users', userRouter);
-app.use('/reviewers', reviewersRouter);
+
 
 module.exports = app;
