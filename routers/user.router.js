@@ -6,7 +6,7 @@ router.get('/:userId', async (req, res) => {
     res.json(user);
 });
 
-router.post('/',async (req,res)=>{
+router.post('/register',async (req,res)=>{
     await userController.create(req.body);
     res.send('ok');
 });
