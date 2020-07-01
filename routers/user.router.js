@@ -14,9 +14,5 @@ router.put('/:userId', async(req,res)=>{
     await userController.update(req.params.userId, req.body);
     res.send('ok');
 });
-router.delete('/:userId', async(req,res)=>{
-    await userController.delete(req.params.userId);
-    res.send('ok');
-});
 
 module.exports=router;
