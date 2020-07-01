@@ -1,9 +1,10 @@
 class ReviewController {
-
+    
     constructor(reviewRepository) {
         this.reviewRepository = reviewRepository;
     }
 
+    // Getting all reviews for a partciular movie
     getAllByMovieId(movieId) {
         return this.reviewRepository.find({movieId:movieId});
     }

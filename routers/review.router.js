@@ -18,4 +18,4 @@ router.delete('/:reviewId', async(req,res)=>{
     res.send('ok');
 });
 
-module.exports=router
+module.exports=router;
