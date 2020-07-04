@@ -6,8 +6,7 @@ class AuthController {
 
     async authenticate(username, password){
         const user = await this.userRepository.findOne({username: username, password: password});
-        return user !=null;
-       
+        return user !=null; 
     }
 }
 
