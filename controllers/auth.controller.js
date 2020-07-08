@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken');
+const config = require('../config/auth');
+
 class AuthController {
 
     constructor(userRepository) {
@@ -6,7 +9,14 @@ class AuthController {
 
     async authenticate(username, password){
         const user = await this.userRepository.findOne({username: username, password: password});
-        return user !=null; 
+
+        if (user === null) {
+            return null;
+        }
+
+        return jwt.sign(user.toJSON(), config.secret, {
+            algorithm: config.algorithm
+        });
     }
 }
 
