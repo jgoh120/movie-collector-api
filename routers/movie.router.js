@@ -1,5 +1,6 @@
 const movieController = require('../controllers/movie.controller').movieController;
 const router = require('express').Router();
+const auth = require('../config/auth').auth;
 
 var reviewRouter = require('./review.router');
 
@@ -13,17 +14,17 @@ router.get('/:movieId', async (req, res) => {
     res.json(movie);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
     await movieController.create(req.body);
     res.send('ok');
 });
 
-router.put('/:movieId', async (req, res) => {
+router.put('/:movieId', auth, async (req, res) => {
     await movieController.update(req.params.movieId, req.body);
     res.send('ok');
 });
 
-router.delete('/:movieId', async (req, res) => {
+router.delete('/:movieId', auth, async (req, res) => {
     await movieController.delete(req.params.movieId);
     res.send('ok');
 });
