@@ -1,6 +1,5 @@
 const authController = require('../controllers/auth.controller').authController;
-const jwt = require('express-jwt');
-const config = require('../config/auth');
+const auth = require('../config/auth').auth;
 const express = require('express');
 const router = express.Router();
 
@@ -18,7 +17,7 @@ router.post('/login', async (req, res) => {
     });
 });
 
-router.get('/auth-test', jwt({ secret: config.secret, algorithms: [config.algorithm] }), (req, res) => {
+router.get('/auth-test', auth, (req, res) => {
     res.json(req.user);
 });
 
