@@ -7,16 +7,29 @@ class AuthController {
         this.userRepository = userRepository;
     }
 
-    async authenticate(username, password){
-        const user = await this.userRepository.findOne({username: username, password: password});
+    async authenticate(username, password) {
+        const user = await this.userRepository.findOne({ username: username, password: password });
 
         if (user === null) {
             return null;
         }
+        const payload = {
+            id: user['_id'],
+            username: user['username'],
+            email: user['email'],
+            firstname: user['firstname'],
+            lastname: user['lastname'],
+            contact: user['contact'],
+        }
 
-        return jwt.sign(user.toJSON(), config.secret, {
+        const token= jwt.sign(JSON.stringify(payload), config.secret, {
             algorithm: config.algorithm
         });
+
+        return {
+            token: token,
+            user: payload
+        }
     }
 }
 

@@ -12,8 +12,11 @@ class MovieController {
         return this.movieRepository.findById(id);
     }
 
-    create(movie) {
-        return this.movieRepository.create(movie);
+    create(movie, contributorId) {
+        return this.movieRepository.create({
+            contributorId: contributorId,
+            ...movie
+        });
     }
 
     createAll(movies) {

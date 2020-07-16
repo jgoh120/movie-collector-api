@@ -15,7 +15,7 @@ router.get('/:movieId', async (req, res) => {
 });
 
 router.post('/', auth, async (req, res) => {
-    await movieController.create(req.body);
+    await movieController.create(req.body, req.user.id);
     res.send('ok');
 });
 
