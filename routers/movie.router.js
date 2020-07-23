@@ -15,17 +15,17 @@ router.get('/:movieId', async (req, res) => {
 });
 
 router.post('/', auth, async (req, res) => {
-    await movieController.create(req.body);
+    await movieController.create(req.user.id, req.body);
     res.send('ok');
 });
 
 router.put('/:movieId', auth, async (req, res) => {
-    await movieController.update(req.params.movieId, req.body);
+    await movieController.update(req.user.id, req.params.movieId, req.body);
     res.send('ok');
 });
 
 router.delete('/:movieId', auth, async (req, res) => {
-    await movieController.delete(req.params.movieId);
+    await movieController.delete(req.user.id, req.params.movieId);
     res.send('ok');
 });
 
