@@ -1,13 +1,33 @@
 const auth = require('../config/auth').auth;
-
 const userController = require('../controllers/user.controller').userController;
 const router = require('express').Router();
 
+const { body, validationResult } = require('express-validator');
 
-router.post('/register',async (req,res)=>{
+router.post('/register', [
+    body('username').custom(async (value) => {
+        const user = await userController.getByUsername(value);
+        if (user != null) {
+          return Promise.reject('Username is already in use!');
+        }
+    }),
+    body('email').custom(async (value) => {
+        const user = await userController.getByEmail(value);
+        if (user != null) {
+          return Promise.reject('Email is already in use!');
+        }
+    })
+], async (req, res)=>{
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
     await userController.create(req.body);
     res.send('ok');
 });
+
 router.put('/', auth, async(req,res)=>{
     await userController.update(req.user.id, req.body);
     res.send('ok');
