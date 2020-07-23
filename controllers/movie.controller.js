@@ -12,7 +12,7 @@ class MovieController {
         return this.movieRepository.findById(id);
     }
 
-    create(movie, contributorId) {
+    create(contributorId, movie) {
         return this.movieRepository.create({
             contributorId: contributorId,
             ...movie
@@ -23,11 +23,11 @@ class MovieController {
         return this.movieRepository.insertMany(movies);
     }
     
-    update(id, movie) {
+    update(contributorId, id, movie) {
         return this.movieRepository.updateOne({ _id: id }, movie);
     }
 
-    delete(id) {
+    delete(contributorId, id) {
         return this.movieRepository.deleteOne({ _id: id });
     }
 }

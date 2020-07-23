@@ -7,15 +7,15 @@ router.get('/', async (req,res)=>{
     res.json(reviews);
 });
 router.post('/', auth, async (req,res)=>{
-    await reviewController.create(req.body);
+    await reviewController.create(req.user.id, req.body);
     res.send('ok');
 });
 router.put('/:reviewId', auth, async(req,res)=>{
-    await reviewController.update(req.params.reviewId, req.body);
+    await reviewController.update(req.user.id, req.params.reviewId, req.body);
     res.send('ok');
 });
 router.delete('/:reviewId', auth, async(req,res)=>{
-    await reviewController.delete(req.params.reviewId);
+    await reviewController.delete(req.user.id, req.params.reviewId);
     res.send('ok');
 });
 

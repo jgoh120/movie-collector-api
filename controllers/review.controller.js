@@ -13,18 +13,19 @@ class ReviewController {
         return this.reviewRepository.findById(id);
     }
 
-    create(movieId,review) {
+    create(authorId, movieId,review) {
         return this.reviewRepository.create({
-            movieId:movieId,
+            movieId: movieId,
+            authorId: authorId,
             ...review
         });
     }
     
-    update(id,review) {
+    update(authorId, id,review) {
         return this.reviewRepository.updateOne({ _id: id }, review);
     }
 
-    delete(id) {
+    delete(authorId, id) {
         return this.reviewRepository.deleteOne({ _id: id });
     }
 }
