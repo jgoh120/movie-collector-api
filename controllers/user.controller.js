@@ -23,6 +23,16 @@ class UserController {
     delete(id) {
         return this.userRepository.deleteOne({ _id: id });
     }
+
+    getByUsername(username) {
+        return this.userRepository.findOne({ username: username });
+    }
+
+    getByEmail(email) {
+        return this.userRepository.findOne({ email: email });
+    }
+
+
 }
 
 const userRepository = require('../repositories/user.repository');
