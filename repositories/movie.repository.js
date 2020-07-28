@@ -16,8 +16,9 @@ var MovieSchema = new mongoose.Schema({
     posterUrl: {
         type: String
     },
-    contributorId:{
-        type: String
+    contributorId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Users'
     }
 });
 
