@@ -5,10 +5,14 @@ var reviewSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    movieId:{
+    movieId: {
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Movies'       // collection name
-    }    
+        ref: 'Movies'
+    },
+    authorId: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Users'
+    }
 });
 
 module.exports = mongoose.model('Reviews', reviewSchema);
