@@ -4,12 +4,25 @@ class MovieController {
         this.movieRepository = movieRepository;
     }
 
-    getAll() {
-        return this.movieRepository.find();
+    formatMovie(movie) {
+        return {
+            id: movie._id,
+            genre: movie.genre,
+            posterUrl: movie.posterUrl,
+            rating: movie.rating,
+            title: movie.title,
+            contributorId: movie.contributorId
+        }
     }
 
-    get(id) {
-        return this.movieRepository.findById(id);
+    async getAll() {
+        const movies = await this.movieRepository.find();
+        return movies.map(m => this.formatMovie(m));
+    }
+
+    async get(id) {
+        const movie = await this.movieRepository.findById(id);
+        return this.formatMovie(movie);
     }
 
     create(contributorId, movie) {
