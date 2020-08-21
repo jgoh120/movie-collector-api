@@ -12,6 +12,10 @@ var reviewSchema = new mongoose.Schema({
     authorId: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Users'
+    },
+    rating: {
+        type: Number,
+        required: true
     }
 });
 

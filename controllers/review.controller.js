@@ -13,7 +13,7 @@ class ReviewController {
         return this.reviewRepository.findById(id);
     }
 
-    create(authorId, movieId,review) {
+    create(authorId, movieId, review) {
         return this.reviewRepository.create({
             movieId: movieId,
             authorId: authorId,
