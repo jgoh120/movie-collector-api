@@ -9,14 +9,21 @@ var reviewSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Movies'
     },
-    authorId: {
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Users'
+    author: {
+        id: {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'Users'
+        },
+        name: {
+            type: String
+        }
     },
     rating: {
         type: Number,
         required: true
     }
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model('Reviews', reviewSchema);
