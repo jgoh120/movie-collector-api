@@ -7,7 +7,7 @@ router.get('/', async (req,res)=>{
     res.json(reviews);
 });
 router.post('/', auth, async (req,res)=>{
-    await reviewController.create(req.user.id, req.body);
+    await reviewController.create(req.user, req.params.movieId, req.body);
     res.send('ok');
 });
 router.put('/:reviewId', auth, async(req,res)=>{

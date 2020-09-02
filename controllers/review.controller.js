@@ -6,17 +6,24 @@ class ReviewController {
 
     // Getting all reviews for a partciular movie
     getAllByMovieId(movieId) {
-        return this.reviewRepository.find({movieId:movieId});
+        return this.reviewRepository.find({ movieId:movieId }, null, {
+            sort: {
+                createdAt: -1
+            }
+        });
     }
 
     get(id) {
         return this.reviewRepository.findById(id);
     }
 
-    create(authorId, movieId,review) {
+    create(author, movieId, review) {
         return this.reviewRepository.create({
             movieId: movieId,
-            authorId: authorId,
+            author: {
+                id: author.id,
+                name: `${author.firstname} ${author.lastname}`
+            },
             ...review
         });
     }
