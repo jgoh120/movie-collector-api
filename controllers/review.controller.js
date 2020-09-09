@@ -4,17 +4,29 @@ class ReviewController {
         this.reviewRepository = reviewRepository;
     }
 
+    formatReview(review) {
+        return {
+            id: review._id,
+            description: review.description,
+            rating: review.rating,
+            header: review.header,
+            author: review.author
+        }
+    }
+
     // Getting all reviews for a partciular movie
-    getAllByMovieId(movieId) {
-        return this.reviewRepository.find({ movieId:movieId }, null, {
+    async getAllByMovieId(movieId) {
+        const reviews = await this.reviewRepository.find({ movieId:movieId }, null, {
             sort: {
                 createdAt: -1
             }
         });
+        return reviews.map(r => this.formatReview(r))
     }
 
-    get(id) {
-        return this.reviewRepository.findById(id);
+    async get(id) {
+        const review = await this.reviewRepository.findById(id);
+        return this.formatReview(review);
     }
 
     create(author, movieId, review) {

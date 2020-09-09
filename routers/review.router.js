@@ -6,6 +6,10 @@ router.get('/', async (req,res)=>{
     const reviews = await reviewController.getAllByMovieId(req.params.movieId);
     res.json(reviews);
 });
+router.get('/:reviewId', auth, async(req, res)=>{
+    const review = await reviewController.get(req.params.reviewId);
+    res.json(review);
+})
 router.post('/', auth, async (req,res)=>{
     await reviewController.create(req.user, req.params.movieId, req.body);
     res.send('ok');
