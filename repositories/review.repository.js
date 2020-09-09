@@ -1,6 +1,10 @@
 var mongoose = require('mongoose');
 
 var reviewSchema = new mongoose.Schema({
+    header: {
+        type: String,
+        required: true
+    },
     description: {
         type: String,
         required: true
