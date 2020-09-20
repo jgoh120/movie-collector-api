@@ -40,7 +40,7 @@ class ReviewController {
         });
     }
     
-    update(authorId, id,review) {
+    update(authorId, id, review) {
         return this.reviewRepository.updateOne({ _id: id }, review);
     }
 
