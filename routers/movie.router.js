@@ -29,6 +29,11 @@ router.delete('/:movieId', auth, async (req, res) => {
     res.send('ok');
 });
 
+router.get('/:movieId/stats', async (req, res) => {
+    const stats = await movieController.getStatistics(req.params.movieId);
+    res.json(stats);
+});
+
 router.use('/:movieId/reviews',reviewRouter)
 
 module.exports = router;

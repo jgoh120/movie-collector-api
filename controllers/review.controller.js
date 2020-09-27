@@ -1,7 +1,8 @@
 class ReviewController {
     
-    constructor(reviewRepository) {
+    constructor(reviewRepository, movieStatisticsRepository) {
         this.reviewRepository = reviewRepository;
+        this.movieStatisticsRepository = movieStatisticsRepository;
     }
 
     formatReview(review) {
@@ -29,8 +30,31 @@ class ReviewController {
         return this.formatReview(review);
     }
 
-    create(author, movieId, review) {
-        return this.reviewRepository.create({
+    async updateMovieRating(movieId) {
+        const reviews = await this.getAllByMovieId(movieId);
+        const weight = 1 / reviews.length;
+        const stats = reviews.reduce((statistics, r) => {
+            statistics.count += 1;
+            statistics.average += r.rating * weight;
+            statistics.distribution[r.rating - 1] += 1;
+            return statistics;
+        }, {
+            distribution: [0, 0, 0, 0, 0],
+            count: 0,
+            average: 0
+        });
+
+        await this.movieStatisticsRepository.findOneAndUpdate({ movieId }, {
+            movieId: movieId,
+            rating: stats
+        }, {
+            new: true,
+            upsert: true
+        });
+    }
+
+    async create(author, movieId, review) {
+        await this.reviewRepository.create({
             movieId: movieId,
             author: {
                 id: author.id,
@@ -38,18 +62,22 @@ class ReviewController {
             },
             ...review
         });
+        this.updateMovieRating(movieId);
     }
     
-    update(authorId, id, review) {
-        return this.reviewRepository.updateOne({ _id: id }, review);
+    async update(authorId, movieId, id, review) {
+        await this.reviewRepository.updateOne({ _id: id }, review);
+        this.updateMovieRating(movieId);
     }
 
-    delete(authorId, id) {
-        return this.reviewRepository.deleteOne({ _id: id });
+    async delete(authorId, movieId, id) {
+        await this.reviewRepository.deleteOne({ _id: id });
+        this.updateMovieRating(movieId);
     }
 }
 
 const reviewRepository = require('../repositories/review.repository');
+const movieStatisticsRepository = require('../repositories/movieStatistics.repository');
 module.exports = {
-    reviewController: new ReviewController(reviewRepository)
+    reviewController: new ReviewController(reviewRepository, movieStatisticsRepository)
 };
