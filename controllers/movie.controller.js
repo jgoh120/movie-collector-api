@@ -1,7 +1,8 @@
 class MovieController {
 
-    constructor(movieRepository) {
+    constructor(movieRepository, movieStatisticsRepository) {
         this.movieRepository = movieRepository;
+        this.movieStatisticsRepository = movieStatisticsRepository;
     }
 
     formatMovie(movie) {
@@ -43,9 +44,16 @@ class MovieController {
     delete(contributorId, id) {
         return this.movieRepository.deleteOne({ _id: id });
     }
+
+    getStatistics(id) {
+        return this.movieStatisticsRepository.findOne({
+            movieId: id
+        });
+    }
 }
 
 const movieRepository = require('../repositories/movie.repository');
+const movieStatisticsRepository = require('../repositories/movieStatistics.repository');
 module.exports = {
-    movieController: new MovieController(movieRepository)
+    movieController: new MovieController(movieRepository, movieStatisticsRepository)
 };

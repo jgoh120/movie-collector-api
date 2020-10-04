@@ -15,11 +15,11 @@ router.post('/', auth, async (req,res)=>{
     res.send('ok');
 });
 router.put('/:reviewId', auth, async(req,res)=>{
-    await reviewController.update(req.user.id, req.params.reviewId, req.body);
+    await reviewController.update(req.user.id, req.params.movieId, req.params.reviewId, req.body);
     res.send('ok');
 });
 router.delete('/:reviewId', auth, async(req,res)=>{
-    await reviewController.delete(req.user.id, req.params.reviewId);
+    await reviewController.delete(req.user.id, req.params.movieId, req.params.reviewId);
     res.send('ok');
 });
 
