@@ -19,6 +19,9 @@ var MovieSchema = new mongoose.Schema({
     contributorId: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Users'
+    },
+    averageRating: {
+        type: Number
     }
 });
 

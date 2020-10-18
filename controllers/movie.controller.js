@@ -10,9 +10,9 @@ class MovieController {
             id: movie._id,
             genre: movie.genre,
             posterUrl: movie.posterUrl,
-            rating: movie.rating,
+            averageRating: movie.averageRating,
             title: movie.title,
-            contributorId: movie.contributorId
+            contributorId: movie.contributorId,
         }
     }
 
