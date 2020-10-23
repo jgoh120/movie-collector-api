@@ -1,8 +1,9 @@
 class ReviewController {
     
-    constructor(reviewRepository, movieStatisticsRepository) {
+    constructor(reviewRepository, movieStatisticsRepository, movieRepository) {
         this.reviewRepository = reviewRepository;
         this.movieStatisticsRepository = movieStatisticsRepository;
+        this.movieRepository = movieRepository;
     }
 
     formatReview(review) {
@@ -47,6 +48,10 @@ class ReviewController {
             average: 0
         });
 
+        await this.movieRepository.updateOne({ _id: movieId }, {
+            averageRating: stats.average
+        });
+
         await this.movieStatisticsRepository.findOneAndUpdate({ movieId }, {
             movieId: movieId,
             rating: stats
@@ -65,22 +70,23 @@ class ReviewController {
             },
             ...review
         });
-        this.updateMovieRating(movieId);
+        await this.updateMovieRating(movieId);
     }
     
     async update(authorId, movieId, id, review) {
         await this.reviewRepository.updateOne({ _id: id }, review);
-        this.updateMovieRating(movieId);
+        await this.updateMovieRating(movieId);
     }
 
     async delete(authorId, movieId, id) {
         await this.reviewRepository.deleteOne({ _id: id });
-        this.updateMovieRating(movieId);
+        await this.updateMovieRating(movieId);
     }
 }
 
 const reviewRepository = require('../repositories/review.repository');
 const movieStatisticsRepository = require('../repositories/movieStatistics.repository');
+const movieRepository = require('../repositories/movie.repository');
 module.exports = {
-    reviewController: new ReviewController(reviewRepository, movieStatisticsRepository)
+    reviewController: new ReviewController(reviewRepository, movieStatisticsRepository, movieRepository)
 };
