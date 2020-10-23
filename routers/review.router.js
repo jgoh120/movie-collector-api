@@ -1,9 +1,19 @@
 const reviewController = require('../controllers/review.controller').reviewController;
 const router = require('express').Router({mergeParams:true});
 const auth = require('../config/auth').auth;
+const _ = require('lodash');
 
 router.get('/', async (req,res)=>{
-    const reviews = await reviewController.getAllByMovieId(req.params.movieId);
+
+    // TODO need to perform validation on options to only allow supported values
+    const options = {
+        sortBy: _.get(req.query, 'sortBy', 'createdAt'), // createdAt, rating
+        direction: _.get(req.query, 'direction', 'desc'), // desc, asc
+        limit: parseInt(_.get(req.query, 'limit', '10')), // any number > 0
+        page: parseInt(_.get(req.query, 'page', '1')) // any number >= 1
+    };
+
+    const reviews = await reviewController.getAllByMovieId(req.params.movieId, options);
     res.json(reviews);
 });
 router.get('/:reviewId', auth, async(req, res)=>{

@@ -16,12 +16,15 @@ class ReviewController {
     }
 
     // Getting all reviews for a partciular movie
-    async getAllByMovieId(movieId) {
-        const reviews = await this.reviewRepository.find({ movieId:movieId }, null, {
-            sort: {
-                createdAt: -1
-            }
-        });
+    async getAllByMovieId(movieId, options) {
+
+        const queryOptions = {};
+        queryOptions.sort = {};
+        queryOptions.sort[options.sortBy] = options.direction == 'desc' ? -1 : 1;
+        queryOptions.limit = options.limit;
+        queryOptions.skip = options.limit * (options.page - 1);
+
+        const reviews = await this.reviewRepository.find({ movieId: movieId }, null, queryOptions);
         return reviews.map(r => this.formatReview(r))
     }
 
