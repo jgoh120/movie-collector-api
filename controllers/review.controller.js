@@ -16,14 +16,32 @@ class ReviewController {
         }
     }
 
+    async getPageByMovieId(movieId, pagination) {
+        const reviews = await this.getAllByMovieId(movieId, pagination);
+        const count = await this.getTotalCountByMovieId(movieId);
+        const totalPages = Math.ceil(count / pagination.limit);
+
+        return {
+            reviews: reviews,
+            page: pagination.page,
+            totalPages: totalPages,
+            nextPage: pagination.page < totalPages ? pagination.page + 1 : null,
+            prevPage: pagination.page <= 1 ? null : pagination.page - 1
+        }
+    }
+
+    async getTotalCountByMovieId(movieId) {
+        return await this.reviewRepository.countDocuments({ movieId: movieId });
+    }
+
     // Getting all reviews for a partciular movie
-    async getAllByMovieId(movieId, options) {
+    async getAllByMovieId(movieId, pagination) {
 
         const queryOptions = {};
         queryOptions.sort = {};
-        queryOptions.sort[options.sortBy] = options.direction == 'desc' ? -1 : 1;
-        queryOptions.limit = options.limit;
-        queryOptions.skip = options.limit * (options.page - 1);
+        queryOptions.sort[pagination.sortBy] = pagination.direction == 'desc' ? -1 : 1;
+        queryOptions.limit = pagination.limit;
+        queryOptions.skip = pagination.limit * (pagination.page - 1);
 
         const reviews = await this.reviewRepository.find({ movieId: movieId }, null, queryOptions);
         return reviews.map(r => this.formatReview(r))

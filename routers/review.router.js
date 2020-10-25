@@ -6,15 +6,15 @@ const _ = require('lodash');
 router.get('/', async (req,res)=>{
 
     // TODO need to perform validation on options to only allow supported values
-    const options = {
+    const pagination = {
         sortBy: _.get(req.query, 'sortBy', 'createdAt'), // createdAt, rating
         direction: _.get(req.query, 'direction', 'desc'), // desc, asc
         limit: parseInt(_.get(req.query, 'limit', '10')), // any number > 0
         page: parseInt(_.get(req.query, 'page', '1')) // any number >= 1
     };
 
-    const reviews = await reviewController.getAllByMovieId(req.params.movieId, options);
-    res.json(reviews);
+    const page = await reviewController.getPageByMovieId(req.params.movieId, pagination);
+    res.json(page);
 });
 router.get('/:reviewId', auth, async(req, res)=>{
     const review = await reviewController.get(req.params.reviewId);
