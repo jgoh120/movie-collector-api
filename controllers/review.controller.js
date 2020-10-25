@@ -19,14 +19,11 @@ class ReviewController {
     async getPageByMovieId(movieId, pagination) {
         const reviews = await this.getAllByMovieId(movieId, pagination);
         const count = await this.getTotalCountByMovieId(movieId);
-        const totalPages = Math.ceil(count / pagination.limit);
 
         return {
             reviews: reviews,
             page: pagination.page,
-            totalPages: totalPages,
-            nextPage: pagination.page < totalPages ? pagination.page + 1 : null,
-            prevPage: pagination.page <= 1 ? null : pagination.page - 1
+            totalCount: count
         }
     }
 
