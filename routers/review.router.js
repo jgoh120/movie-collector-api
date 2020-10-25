@@ -10,10 +10,15 @@ router.get('/', async (req,res)=>{
         sortBy: _.get(req.query, 'sortBy', 'createdAt'), // createdAt, rating
         direction: _.get(req.query, 'direction', 'desc'), // desc, asc
         limit: parseInt(_.get(req.query, 'limit', '10')), // any number > 0
-        page: parseInt(_.get(req.query, 'page', '1')) // any number >= 1
+        page: parseInt(_.get(req.query, 'page', '1')), // any number >= 1
     };
 
-    const page = await reviewController.getPageByMovieId(req.params.movieId, pagination);
+    const filter = {
+        rating: parseInt(_.get(req.query, 'filterRating', '0')),
+        authorId: _.get(req.query, 'filterAuthorId', null)
+    }
+
+    const page = await reviewController.getPageByMovieId(req.params.movieId, pagination, filter);
     res.json(page);
 });
 router.get('/:reviewId', auth, async(req, res)=>{
