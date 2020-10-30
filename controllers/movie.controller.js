@@ -16,9 +16,56 @@ class MovieController {
         }
     }
 
-    async getAll() {
-        const movies = await this.movieRepository.find();
-        return movies.map(m => this.formatMovie(m));
+    // async getAll() {
+    //     const movies = await this.movieRepository.find();
+    //     return movies.map(m => this.formatMovie(m));
+    // }
+
+    async getPageOfChoice(pagination, filter){
+        const movies = await this.getAll(pagination, filter);
+        const count = await this.getTotalCount(filter);
+
+        return {
+            movies: movies,
+            page: pagination.page,
+            totalCount: count
+        }
+    }
+
+    async getTotalCount(filter){
+        const query = {};
+        if (filter != undefined) {
+            if (filter.rating > 0 && filter.rating <= 5) {
+                query.rating = filter.rating;
+            }
+
+            if (filter.genre != null) {
+                query['genre'] = filter.genre;
+            }
+        }
+        return await this.movieRepository.countDocuments(query);
+    }
+
+    async getAll(pagination, filter){
+        if (pagination != undefined) {
+            queryOptions.sort = {};
+            queryOptions.sort[pagination.sortBy] = pagination.direction == 'desc' ? -1 : 1;
+            queryOptions.limit = pagination.limit;
+            queryOptions.skip = pagination.limit * (pagination.page - 1);
+        }
+
+        const query = { };
+        if (filter != undefined) {
+            if (filter.rating > 0 && filter.rating <= 5) {
+                query.rating = filter.rating;
+            }
+            if (filter.genre != null) {
+                query['genre'] = filter.genre;
+            }
+        }
+        
+        const movies = await this.movieRepository.find(query, null, queryOptions);
+        return movies.map(r => this.formatMovie);
     }
 
     async get(id) {
