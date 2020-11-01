@@ -16,16 +16,57 @@ class ReviewController {
         }
     }
 
+    async getPageByMovieId(movieId, pagination, filter) {
+        const reviews = await this.getAllByMovieId(movieId, pagination, filter);
+        const count = await this.getTotalCountByMovieId(movieId, filter);
+
+        return {
+            reviews: reviews,
+            page: pagination.page,
+            totalCount: count
+        }
+    }
+
+    async getTotalCountByMovieId(movieId, filter) {
+
+        const query = { movieId };
+        if (filter != undefined) {
+            if (filter.rating > 0 && filter.rating <= 5) {
+                query.rating = filter.rating;
+            }
+
+            if (filter.authorId != null) {
+                query['author.id'] = filter.authorId;
+            }
+        }
+
+        return await this.reviewRepository.countDocuments(query);
+    }
+
     // Getting all reviews for a partciular movie
-    async getAllByMovieId(movieId, options) {
+    async getAllByMovieId(movieId, pagination, filter) {
 
         const queryOptions = {};
-        queryOptions.sort = {};
-        queryOptions.sort[options.sortBy] = options.direction == 'desc' ? -1 : 1;
-        queryOptions.limit = options.limit;
-        queryOptions.skip = options.limit * (options.page - 1);
+        if (pagination != undefined) {
+            queryOptions.sort = {};
+            queryOptions.sort[pagination.sortBy] = pagination.direction == 'desc' ? -1 : 1;
+            queryOptions.limit = pagination.limit;
+            queryOptions.skip = pagination.limit * (pagination.page - 1);
+        }
 
-        const reviews = await this.reviewRepository.find({ movieId: movieId }, null, queryOptions);
+        const query = { movieId };
+        if (filter != undefined) {
+            if (filter.rating > 0 && filter.rating <= 5) {
+                query.rating = filter.rating;
+            }
+
+            if (filter.authorId != null) {
+                query['author.id'] = filter.authorId;
+            }
+        }
+
+
+        const reviews = await this.reviewRepository.find(query, null, queryOptions);
         return reviews.map(r => this.formatReview(r))
     }
 
