@@ -29,7 +29,7 @@ class ReviewController {
 
     async getTotalCountByMovieId(movieId, filter) {
 
-        const query = { movieId };
+        const query = {  };
         if (filter != undefined) {
             if (filter.rating > 0 && filter.rating <= 5) {
                 query.rating = filter.rating;
