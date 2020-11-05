@@ -16,12 +16,7 @@ class MovieController {
         }
     }
 
-    // async getAll() {
-    //     const movies = await this.movieRepository.find();
-    //     return movies.map(m => this.formatMovie(m));
-    // }
-
-    async getPageOfChoice(pagination, filter){
+    async getPage(pagination, filter){
         const movies = await this.getAll(pagination, filter);
         const count = await this.getTotalCount(filter);
 
@@ -39,14 +34,15 @@ class MovieController {
                 query.rating = filter.rating;
             }
 
-            if (filter.genre != null) {
-                query['genre'] = filter.genre;
+            if (filter.genres != null) {
+                query['genres'] = filter.genres
             }
         }
         return await this.movieRepository.countDocuments(query);
     }
 
     async getAll(pagination, filter){
+        const queryOptions = {};
         if (pagination != undefined) {
             queryOptions.sort = {};
             queryOptions.sort[pagination.sortBy] = pagination.direction == 'desc' ? -1 : 1;

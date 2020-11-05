@@ -5,8 +5,6 @@ const auth = require('../config/auth').auth;
 var reviewRouter = require('./review.router');
 
 router.get('/', async (req, res) => {
-    // const movies = await movieController.getAll();
-    // res.json(movies);
     const pagination = {
         sortBy: _.get(req.query, 'sortBy', 'createdAt'), // createdAt, rating
         direction: _.get(req.query, 'direction', 'desc'), // desc, asc
@@ -14,8 +12,8 @@ router.get('/', async (req, res) => {
         page: parseInt(_.get(req.query, 'page', '1')), // any number >= 1
     };
     const filter = {
-        averageRating: parseInt(_.get(req.query, 'filterRating', '0')),
-        genre: _.get(req.query, 'filterGenre', null)
+        rating: parseInt(_.get(req.query, 'filterRating', '0')),
+        genre: _.get(req.query, 'filterGenres', '').split(',')
     }
     const page = await movieController.getPage(pagination, filter);
     res.json(page);
