@@ -1,7 +1,7 @@
 const movieController = require('../controllers/movie.controller').movieController;
 const router = require('express').Router();
 const auth = require('../config/auth').auth;
-
+const _ = require('lodash');
 var reviewRouter = require('./review.router');
 
 router.get('/', async (req, res) => {
@@ -12,8 +12,9 @@ router.get('/', async (req, res) => {
         page: parseInt(_.get(req.query, 'page', '1')), // any number >= 1
     };
     const filter = {
-        rating: parseInt(_.get(req.query, 'filterRating', '0')),
-        genre: _.get(req.query, 'filterGenres', '').split(',')
+        minRating: parseFloat(_.get(req.query, 'filterMinRating', '1')),
+        maxRating: parseFloat(_.get(req.query, 'filterMaxRating', '5')),
+        genre: _.get(req.query, 'filterGenre', '').split(',').filter(g => g != '')
     }
     const page = await movieController.getPage(pagination, filter);
     res.json(page);

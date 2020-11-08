@@ -10,7 +10,7 @@ class MovieController {
             id: movie._id,
             genre: movie.genre,
             posterUrl: movie.posterUrl,
-            averageRating: movie.averageRating,
+            rating: movie.rating,
             title: movie.title,
             contributorId: movie.contributorId,
         }
@@ -30,12 +30,11 @@ class MovieController {
     async getTotalCount(filter){
         const query = {};
         if (filter != undefined) {
-            if (filter.rating > 0 && filter.rating <= 5) {
-                query.rating = filter.rating;
+            if (filter.minRating >= 1 && filter.maxRating <= 5 && filter.minRating <= filter.maxRating) {
+                query.rating = { $gte: filter.minRating, $lte: filter.maxRating };
             }
-
-            if (filter.genres != null) {
-                query['genres'] = filter.genres
+            if (filter.genre.length > 0) {
+                query.genre = { $all: filter.genre };
             }
         }
         return await this.movieRepository.countDocuments(query);
@@ -52,16 +51,15 @@ class MovieController {
 
         const query = { };
         if (filter != undefined) {
-            if (filter.rating > 0 && filter.rating <= 5) {
-                query.rating = filter.rating;
+            if (filter.minRating >= 1 && filter.maxRating <= 5 && filter.minRating <= filter.maxRating) {
+                query.rating = { $gte: filter.minRating, $lte: filter.maxRating };
             }
-            if (filter.genre != null) {
-                query['genre'] = filter.genre;
+            if (filter.genre.length > 0) {
+                query.genre = { $all: filter.genre };
             }
         }
-        
         const movies = await this.movieRepository.find(query, null, queryOptions);
-        return movies.map(r => this.formatMovie);
+        return movies.map(m => this.formatMovie(m));
     }
 
     async get(id) {
