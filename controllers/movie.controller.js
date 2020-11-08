@@ -10,14 +10,55 @@ class MovieController {
             id: movie._id,
             genre: movie.genre,
             posterUrl: movie.posterUrl,
-            averageRating: movie.averageRating,
+            rating: movie.rating,
             title: movie.title,
             contributorId: movie.contributorId,
         }
     }
 
-    async getAll() {
-        const movies = await this.movieRepository.find();
+    async getPage(pagination, filter){
+        const movies = await this.getAll(pagination, filter);
+        const count = await this.getTotalCount(filter);
+
+        return {
+            movies: movies,
+            page: pagination.page,
+            totalCount: count
+        }
+    }
+
+    async getTotalCount(filter){
+        const query = {};
+        if (filter != undefined) {
+            if (filter.minRating >= 1 && filter.maxRating <= 5 && filter.minRating <= filter.maxRating) {
+                query.rating = { $gte: filter.minRating, $lte: filter.maxRating };
+            }
+            if (filter.genre.length > 0) {
+                query.genre = { $all: filter.genre };
+            }
+        }
+        return await this.movieRepository.countDocuments(query);
+    }
+
+    async getAll(pagination, filter){
+        const queryOptions = {};
+        if (pagination != undefined) {
+            queryOptions.sort = {};
+            queryOptions.sort[pagination.sortBy] = pagination.direction == 'desc' ? -1 : 1;
+            queryOptions.limit = pagination.limit;
+            queryOptions.skip = pagination.limit * (pagination.page - 1);
+        }
+
+        const query = { };
+        if (filter != undefined) {
+            if (filter.minRating >= 1 && filter.maxRating <= 5 && filter.minRating <= filter.maxRating) {
+                query.rating = { $gte: filter.minRating, $lte: filter.maxRating };
+            }
+            if (filter.genre.length > 0) {
+                query.genre = { $all: filter.genre };
+            }
+        }
+        const movies = await this.movieRepository.find(query, null, queryOptions);
         return movies.map(m => this.formatMovie(m));
     }
 

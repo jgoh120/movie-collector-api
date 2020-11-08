@@ -90,7 +90,7 @@ class ReviewController {
         });
 
         await this.movieRepository.updateOne({ _id: movieId }, {
-            averageRating: stats.average
+            rating: stats.average
         });
 
         await this.movieStatisticsRepository.findOneAndUpdate({ movieId }, {
